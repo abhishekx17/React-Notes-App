@@ -4,15 +4,14 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
 
-  const [task, setTask] = useState(()=>{
+  const [task, setTask] = useState(() => {
     const savedNotes = localStorage.getItem("notes");
-    return savedNotes ? JSON.parse(savedNotes) : []
+    return savedNotes ? JSON.parse(savedNotes) : [];
   });
 
-  
-  useEffect(()=>{
+  useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(task));
-  },[task])
+  }, [task]);
 
   const addNote = (e) => {
     e.preventDefault();
@@ -31,7 +30,14 @@ const App = () => {
 
   return (
     <div className="bg-black min-h-screen text-white flex flex-col items-center px-6 py-10 hide-scrollbar overflow-y-scroll h-64">
-      <h1 className="text-4xl font-bold mb-10 tracking-wide">📝 Notes App</h1>
+      <h1 className="flex items-center text-4xl font-bold mb-10 tracking-wide text-white">
+        <img
+          src="https://cdn0.iconfinder.com/data/icons/apple-apps/100/Apple_Note-512.png"
+          alt="Notes Icon"
+          className="w-12 h-12 mr-4 object-cover"
+        />
+        Notes App
+      </h1>
 
       <div className="w-full max-w-md flex flex-col gap-4">
         <input
