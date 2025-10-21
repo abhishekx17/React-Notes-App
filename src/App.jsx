@@ -1,36 +1,26 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 
 const App = () => {
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
-  const [task, setTask] = useState([]);
 
-   const detailRef = useRef(null);
+  const [task, setTask] = useState(()=>{
+    const savedNotes = localStorage.getItem("notes");
+    return savedNotes ? JSON.parse(savedNotes) : []
+  });
+
+  
+  useEffect(()=>{
+    localStorage.setItem("notes", JSON.stringify(task));
+  },[task])
 
   const addNote = (e) => {
     e.preventDefault();
-
-   if (!title.trim() || !detail.trim()) return; 
-
+    if (!title.trim() || !detail.trim()) return;
     const newNote = { title, detail };
     setTask([...task, newNote]);
-
     setTitle("");
     setDetail("");
-  };
-
-  const handleTitle = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      detailRef.current.focus();
-    }
-  };
-
-  const handleDetail = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      addNote(e);
-    }
   };
 
   const deleteNote = (index) => {
@@ -49,8 +39,6 @@ const App = () => {
           placeholder="Enter your Note"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-            ref={detailRef}
-          onKeyDown={handleTitle}
           className="w-full p-3 rounded-2xl
                      bg-gray-800 text-gray-100 placeholder-gray-400 
                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900
@@ -62,8 +50,6 @@ const App = () => {
           placeholder="Enter details here..."
           value={detail}
           onChange={(e) => setDetail(e.target.value)}
-            ref={detailRef}
-          onKeyDown={handleDetail}
           className="w-full h-32 p-3 rounded-2xl 
                      bg-gray-800 text-gray-100 placeholder-gray-400 
                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900
